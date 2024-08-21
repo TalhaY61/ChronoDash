@@ -4,7 +4,7 @@
 Class = require 'class'
 
 -- bird class we've written
-require 'Player'
+require 'Mage'
 
 -- physical screen dimensions
 WINDOW_WIDTH = 1280
@@ -18,10 +18,10 @@ VIRTUAL_HEIGHT = 288
 local background = love.graphics.newImage('background.png')
 local platform = love.graphics.newImage('platform.png')
 
-local platformSpeed = 60
+local platformSpeed = 100
 local platformScroll = 0
 
-local player = Player()
+local mage = Mage()
 
 
 function love.load()
@@ -34,11 +34,7 @@ end
 
 -- Update-Funktion, um die Spiel-Logik zu aktualisieren
 function love.update(dt)
-    -- Plattform bewegen
-    platformScroll = platformScroll - platformSpeed * dt
-    if platformScroll <= -platform:getWidth() then
-        platformScroll = 0
-    end
+    platformScroll = (platformScroll + platformSpeed * dt)
 end
 
 function love.keypressed(key)
@@ -51,9 +47,8 @@ end
 function love.draw()
     
     love.graphics.draw(background, 0, 0)
-    love.graphics.draw(platform, platformScroll, 660)
-    love.graphics.draw(platform, platformScroll + platform:getWidth(), 660)
+    love.graphics.draw(platform, -platformScroll, 655)
 
-    player:render()
+    mage:render()
 
 end
