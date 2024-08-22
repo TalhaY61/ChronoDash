@@ -1,10 +1,9 @@
--- ObstaclesManager.lua
 ObstaclesManager = Class{}
 
 function ObstaclesManager:init()
     self.obstacles = {} -- Table to store all obstacles
     self.spawnTimer = 0
-    self.spawnInterval = 2 -- Time in seconds between spawning obstacles
+    self.spawnInterval = 5 -- Time in seconds between spawning obstacles
 end
 
 function ObstaclesManager:spawnObstacle()

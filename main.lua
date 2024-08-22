@@ -1,5 +1,6 @@
 -- main.lua
 Class = require 'class'
+
 require 'Mage'
 require 'Scorpion'
 require 'Cactus'
@@ -9,9 +10,12 @@ require 'ObstaclesManager'
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
 
+-- Platform height
+PLATFORM_HEIGHT = 660
+
 -- Load the background and platform images
-local background = love.graphics.newImage('background.png')
-local platform = love.graphics.newImage('platform.png')
+local background = love.graphics.newImage('images/background.png')
+local platform = love.graphics.newImage('images/platform.png')
 
 -- Initialize game entities
 local mage = Mage() -- Mage instance
@@ -22,9 +26,8 @@ local platformSpeed = 100
 local platformScroll = 0
 
 -- Pause variables, after collision
-local isPaused = false
-local pauseDuration = 2
-local pauseTimer = 0    
+local scrolling = true
+local spawnTimer = 0    
 
 function love.load()
     love.graphics.setDefaultFilter('nearest', 'nearest')
@@ -47,25 +50,25 @@ function love.keyboard.wasPressed(key)
 end
 
 function love.update(dt)
-    if isPaused then
-        pauseTimer = pauseTimer - dt
-        if pauseTimer <= 0 then
-            isPaused = false -- Resume game
+
+    if scrolling then
+        -- Update platform scrolling
+        platformScroll = (platformScroll + platformSpeed * dt) % platform:getWidth()
+
+        spawnTimer = spawnTimer + dt
+
+        if spawnTimer >= 3 then 
+            obstaclesManager:spawnObstacle()
+            spawnTimer = 0
         end
-        return -- Skip the rest of the update
-    end
 
-    -- Update platform scrolling
-    platformScroll = (platformScroll + platformSpeed * dt) % platform:getWidth()
+        -- Update the mage and obstacles
+        mage:update(dt)
+        obstaclesManager:update(dt)
 
-    -- Update the mage and obstacles
-    mage:update(dt)
-    obstaclesManager:update(dt)
-
-    if obstaclesManager:checkCollisions(mage) then
-        isPaused = true
-        pauseTimer = pauseDuration
-        print("Collision detected! Game paused.")
+        if obstaclesManager:checkCollisions(mage) then
+            scrolling = false
+        end
     end
 
     love.keyboard.keysPressed = {}

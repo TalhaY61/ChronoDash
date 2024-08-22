@@ -1,14 +1,14 @@
-
 Cactus = Class{}
 
+local CACTUS_IMAGE = love.graphics.newImage('images/cactus.png')
+
 function Cactus:init()
-    self.image = love.graphics.newImage('cactus.png')
-    self.width = self.image:getWidth()
-    self.height = self.image:getHeight()
+    self.width = CACTUS_IMAGE:getWidth()
+    self.height = CACTUS_IMAGE:getHeight()
 
     -- Set initial position off the right side of the screen
     self.x = WINDOW_WIDTH + self.width + math.random(0, 300)
-    self.y = 660 - self.height -- Place the cactus on the ground
+    self.y = PLATFORM_HEIGHT - self.height -- Place the cactus on the ground
 
     -- Set a speed for the cactus to move towards the player
     self.speed = 300
@@ -25,10 +25,5 @@ function Cactus:update(dt)
 end
 
 function Cactus:render()
-    love.graphics.draw(self.image, self.x, self.y)
-
-    -- Draw collision box
-    love.graphics.setColor(1, 0, 0, 0.5)  -- Set color to semi-transparent red
-    love.graphics.rectangle('line', self.x, self.y, self.width, self.height)
-    love.graphics.setColor(1, 1, 1, 1)  -- Reset color to white
+    love.graphics.draw(CACTUS_IMAGE, self.x, self.y)
 end
