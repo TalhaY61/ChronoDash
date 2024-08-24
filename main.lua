@@ -50,22 +50,15 @@ function love.keyboard.wasPressed(key)
 end
 
 function love.update(dt)
-
     if scrolling then
         -- Update platform scrolling
         platformScroll = (platformScroll + platformSpeed * dt) % platform:getWidth()
-
-        spawnTimer = spawnTimer + dt
-
-        if spawnTimer >= 3 then 
-            obstaclesManager:spawnObstacle()
-            spawnTimer = 0
-        end
 
         -- Update the mage and obstacles
         mage:update(dt)
         obstaclesManager:update(dt)
 
+        -- Check for collisions between mage and obstacles
         if obstaclesManager:checkCollisions(mage) then
             scrolling = false
         end

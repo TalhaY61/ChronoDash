@@ -13,9 +13,9 @@ function Mage:init()
     self.dy = 0 -- If dy is positive, the mage is falling; if negative, the mage is jumping
     self.gravity = 40
 
-    self.jumpHeight = -20 -- Negative y value to move up; positive y value to move down
-    self.isJumping = false
-    self.canJump = true -- Variable to check if jump is allowed
+    self.jumpHeight = -15 -- Negative y value to move up; positive y value to move down
+    self.jumpCount = 0 -- Number of jumps made by the mage
+    self.maxJumps = 2 -- Maximum number of jumps allowed
 
     -- Custom hitbox dimensions
     -- TODO: Adjust the hitbox dimensions to fit the mage sprite, this collision is a crazy crap
@@ -43,23 +43,21 @@ end
 
 
 function Mage:update(dt)
-    -- Jumping
-    if love.keyboard.wasPressed('space') and self.canJump then
-        self.isJumping = true
-        self.dy = self.jumpHeight
-        self.canJump = false -- Prevent continuous jumping
-    end
-
-    -- Apply gravity
+    -- Gravity
     self.dy = self.dy + self.gravity * dt
     self.y = self.y + self.dy
 
-    -- Reset jump when the mage hits the ground
-    if self.y >= 660 - self.height then
-        self.y = 660 - self.height
+    -- Check if the mage is on the ground
+    if self.y >= PLATFORM_HEIGHT - self.height then
+        self.y = PLATFORM_HEIGHT - self.height
         self.dy = 0
-        self.isJumping = false
-        self.canJump = true -- Allow jumping again
+        self.jumpCount = 0
+    end
+
+    -- Jump logic
+    if love.keyboard.wasPressed('space') and self.jumpCount < 2 then
+        self.dy = self.jumpHeight
+        self.jumpCount = self.jumpCount + 1
     end
 end
 
