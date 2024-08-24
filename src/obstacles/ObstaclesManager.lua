@@ -1,10 +1,9 @@
-
+-- src/ObstaclesManager.lua
 local ObstaclesManager = {}
 ObstaclesManager.__index = ObstaclesManager
 
-
-local Scorpion = require 'Scorpion'
-local Cactus = require 'Cactus'
+local Scorpion = require 'src/obstacles/Scorpion'
+local Cactus = require 'src/obstacles/Cactus'
 
 function ObstaclesManager:new()
     local instance = setmetatable({}, ObstaclesManager)
@@ -14,7 +13,6 @@ end
 
 function ObstaclesManager:init()
     self.obstacles = {}
-    self.spawnTimer = 0
 end
 
 function ObstaclesManager:spawnObstacle()

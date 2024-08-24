@@ -1,9 +1,14 @@
 local Mage = {}
 Mage.__index = Mage
 
+local TimeControl = require 'src/abilities/TimeControl'
+
 function Mage:new()
     local instance = setmetatable({}, Mage)
     instance:init()
+    instance.abilities = {
+        timeControl = TimeControl:new()
+    }
     return instance
 end
 
@@ -29,6 +34,7 @@ function Mage:init()
     self.hitboxHeight = self.height
     self.hitboxOffsetX = (self.width - self.hitboxWidth) / 4
     self.hitboxOffsetY = (self.height - self.hitboxHeight) / 2
+    
 end
 
 function Mage:collides(obstacle)
@@ -46,9 +52,11 @@ function Mage:collides(obstacle)
 end
 
 function Mage:update(dt)
+    -- Apply gravity to the mage
     self.dy = self.dy + self.gravity * dt
     self.y = self.y + self.dy
 
+    -- Prevent the mage from falling through the platform
     if self.y >= PLATFORM_HEIGHT - self.height then
         self.y = PLATFORM_HEIGHT - self.height
         self.dy = 0
@@ -56,8 +64,28 @@ function Mage:update(dt)
     end
 
     if love.keyboard.wasPressed('space') and self.jumpCount < self.maxJumps then
-        self.dy = self.jumpHeight
-        self.jumpCount = self.jumpCount + 1
+       self:handleJump()
+    end
+
+    if love.keyboard.wasPressed('t') then
+        self:timeControlAbility()
+    end
+
+    self:handleAbilities(dt)
+end
+
+function Mage:handleJump()
+    self.dy = self.jumpHeight
+    self.jumpCount = self.jumpCount + 1
+end
+
+function Mage:timeControlAbility()
+    self.abilities.timeControl:activate()
+end
+
+function Mage:handleAbilities(dt)
+    for _, ability in pairs(self.abilities) do
+        ability:update(dt)
     end
 end
 
