@@ -1,10 +1,6 @@
--- main.lua
-Class = require 'class'
-
-require 'Mage'
-require 'Scorpion'
-require 'Cactus'
-require 'ObstaclesManager'
+-- Load the modules
+local Mage = require 'Mage'
+local ObstaclesManager = require 'ObstaclesManager'
 
 -- Physical screen dimensions
 WINDOW_WIDTH = 1280
@@ -18,8 +14,8 @@ local background = love.graphics.newImage('images/background.png')
 local platform = love.graphics.newImage('images/platform.png')
 
 -- Initialize game entities
-local mage = Mage() -- Mage instance
-local obstaclesManager = ObstaclesManager() -- ObstaclesManager instance
+local mage = Mage:new() -- Mage instance
+local obstaclesManager = ObstaclesManager:new() -- ObstaclesManager instance
 
 -- Platform scrolling variables
 local platformSpeed = 100
@@ -29,7 +25,7 @@ local platformScroll = 0
 local scrolling = true
 local spawnTimer = 0    
 
-function love.load()
+function love.load()    
     love.graphics.setDefaultFilter('nearest', 'nearest')
     love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT)
     love.window.setTitle('Chrono Dash')
@@ -74,6 +70,10 @@ function love.draw()
     -- Draw the scrolling platforms
     love.graphics.draw(platform, -platformScroll, 655)
     love.graphics.draw(platform, -platformScroll + platform:getWidth(), 655)
+    
+    -- Draw the FPS in the upper left corner
+    love.graphics.setColor(1, 1, 1)  -- White for the text
+    love.graphics.print("FPS: " .. tostring(love.timer.getFPS()), 10, 10)
 
     -- Draw the mage and obstacles
     mage:render()

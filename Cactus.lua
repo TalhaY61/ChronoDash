@@ -1,29 +1,33 @@
-Cactus = Class{}
+local Cactus = {}
+Cactus.__index = Cactus
 
-local CACTUS_IMAGE = love.graphics.newImage('images/cactus.png')
+function Cactus:new()
+    local instance = setmetatable({}, Cactus)
+    instance:init()
+    return instance
+end
 
 function Cactus:init()
-    self.width = CACTUS_IMAGE:getWidth()
-    self.height = CACTUS_IMAGE:getHeight()
+    self.image = love.graphics.newImage('images/cactus.png')
+    self.width = self.image:getWidth()
+    self.height = self.image:getHeight()
 
-    -- Set initial position off the right side of the screen
     self.x = WINDOW_WIDTH + self.width + math.random(0, 300)
-    self.y = PLATFORM_HEIGHT - self.height -- Place the cactus on the ground
+    self.y = PLATFORM_HEIGHT - self.height
 
-    -- Set a speed for the cactus to move towards the player
     self.speed = 300
 end
 
 function Cactus:update(dt)
-    -- Move the cactus left across the screen
     self.x = self.x - self.speed * dt
 
-    -- Reset position if cactus moves off the screen
     if self.x < -self.width then
-        self.x = WINDOW_WIDTH -- Respawn on the right
+        self.x = WINDOW_WIDTH
     end
 end
 
 function Cactus:render()
-    love.graphics.draw(CACTUS_IMAGE, self.x, self.y)
+    love.graphics.draw(self.image, self.x, self.y)
 end
+
+return Cactus
