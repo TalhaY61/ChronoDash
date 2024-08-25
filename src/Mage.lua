@@ -17,6 +17,14 @@ function Mage:init()
     self.width = self.image:getWidth()
     self.height = self.image:getHeight()
 
+    self.heartImage = love.graphics.newImage('images/mage_hearts_all.png')
+    self.sprites = {
+        full = love.graphics.newQuad(0, 0, 32, 32, self.heartImage:getDimensions()),
+        half = love.graphics.newQuad(32, 0, 32, 32, self.heartImage:getDimensions()),
+        empty = love.graphics.newQuad(0, 32, 32, 32, self.heartImage:getDimensions())
+    }
+    self.currentQuad = self.sprites.full
+
     -- Position on the screen
     self.x = 100
     self.y = PLATFORM_HEIGHT - self.height
@@ -91,6 +99,11 @@ end
 
 function Mage:render()
     love.graphics.draw(self.image, self.x, self.y)
+
+    -- Render Mage hearts, aka health
+    love.graphics.draw(self.heartImage, self.sprites.full, 10, 30)
+    love.graphics.draw(self.heartImage, self.sprites.half, 45, 30)
+    love.graphics.draw(self.heartImage, self.sprites.empty, 80, 30)
 end
 
 return Mage

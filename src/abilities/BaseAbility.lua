@@ -6,6 +6,10 @@ function BaseAbility:new()
     return instance
 end
 
-function BaseAbility:activate() end
+function BaseAbility:init() end
+function BaseAbility:enter() end
+function BaseAbility:exit() end
+function BaseAbility:update(dt) end
+function BaseAbility:render() end
 
 return BaseAbility

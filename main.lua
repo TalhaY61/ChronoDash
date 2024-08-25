@@ -1,6 +1,7 @@
 -- Load the modules
 local Mage = require 'src/Mage'
 local ObstaclesManager = require 'src/obstacles/ObstaclesManager'
+local TimeControl = require 'src/abilities/TimeControl'
 
 -- Physical screen dimensions
 WINDOW_WIDTH = 1280
@@ -16,6 +17,7 @@ local platform = love.graphics.newImage('images/platform.png')
 -- Initialize game entities
 local mage = Mage:new()                         -- Mage instance
 local obstaclesManager = ObstaclesManager:new() -- ObstaclesManager instance
+local timeControlAbility = TimeControl:new()    -- BaseAbility instance
 
 -- Platform scrolling variables
 local platformSpeed = 100
@@ -83,4 +85,6 @@ function love.draw()
     -- Draw the mage and obstacles
     mage:render()
     obstaclesManager:render()
+    timeControlAbility:render()
+    
 end

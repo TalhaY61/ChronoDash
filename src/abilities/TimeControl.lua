@@ -1,40 +1,39 @@
--- src/abilities/TimeControl.lua
 local BaseAbility = require 'src/abilities/BaseAbility'
 
 local TimeControl = setmetatable({}, {__index = BaseAbility})
 TimeControl.__index = TimeControl
 
+-- Constructor for TimeControl
 function TimeControl:new()
     local instance = BaseAbility:new()
     setmetatable(instance, TimeControl)
-    instance.duration = 2      -- Dauer der Zeitverlangsamung in Sekunden
-    instance.cooldown = 10      -- Abklingzeit der Fähigkeit in Sekunden
-    instance.remainingTime = 0  -- Verbleibende Zeit der Fähigkeit
-    instance.isActive = false   -- Status der Fähigkeit
-    instance.cooldownTimer = 0  -- Timer für Abklingzeit
+    
+    instance:init()
     return instance
 end
 
-function TimeControl:activate()
-    if self.cooldownTimer <= 0 and not self.isActive then
-        self.isActive = true
-        self.remainingTime = self.duration
-        _G.timeScale = 0.5  -- Zeit-Skala auf 0.5 setzen
-    end
+-- Initialize sprites and image
+function TimeControl:init() 
+    self.image = love.graphics.newImage('images/timeControlAbility_all.png')
+    self.sprites = {
+        ready = love.graphics.newQuad(0, 0, 32, 32, self.image:getDimensions()),
+        active = love.graphics.newQuad(32, 0, 32, 32, self.image:getDimensions()),
+        cooldown = love.graphics.newQuad(0, 32, 32, 32, self.image:getDimensions())
+    }
+    self.currentQuad = self.sprites.ready
 end
 
-function TimeControl:update(dt)
-    if self.isActive then
-        self.remainingTime = self.remainingTime - dt
-        if self.remainingTime <= 0 then
-            self.isActive = false
-            _G.timeScale = 1  -- Zeit-Skala zurücksetzen
-        end
-    end
+-- Activate the ability
+function TimeControl:activate()
+end
 
-    if self.cooldownTimer > 0 then
-        self.cooldownTimer = self.cooldownTimer - dt
-    end
+-- Update the ability state
+function TimeControl:update(dt)
+end
+
+-- Render the ability icon
+function TimeControl:render()
+    love.graphics.draw(self.image, self.currentQuad, 10, 70)
 end
 
 return TimeControl
