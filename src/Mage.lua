@@ -1,7 +1,9 @@
+
 local Mage = {}
 Mage.__index = Mage
 
 local TimeControl = require 'src/abilities/TimeControl'
+local ObstaclesManager = require "src/obstacles/ObstaclesManager"
 
 function Mage:new()
     local instance = setmetatable({}, Mage)
@@ -33,9 +35,16 @@ function Mage:init()
     self.dy = 0
     self.gravity = 40
 
+    -- Jumping variables
     self.jumpHeight = -15
     self.jumpCount = 0
     self.maxJumps = 2
+
+    -- Health variables
+    self.health = 3
+    self.isInvincible = false
+    self.invincibleTimer = 0
+    self.invincibleDuration = 1
 
     -- Custom hitbox dimensions
     self.hitboxWidth = self.width * 0.7
@@ -71,6 +80,13 @@ function Mage:update(dt)
         self.jumpCount = 0
     end
 
+    if self.isInvincible then
+        self.invincibleTimer = self.invincibleTimer - dt
+        if self.invincibleTimer <= 0 then
+            self.isInvincible = false
+        end
+    end
+
     if love.keyboard.wasPressed('space') and self.jumpCount < self.maxJumps then
        self:handleJump()
     end
@@ -87,6 +103,23 @@ function Mage:handleJump()
     self.jumpCount = self.jumpCount + 1
 end
 
+function Mage:takeDamage(amount)
+    if not self.isInvincible then
+        self.health = self.health - amount
+        self.isInvincible = true
+        self.invincibleTimer = self.invincibleDuration
+        
+        if self.health == 0 then
+            self:die()
+        end
+    end
+end
+
+function Mage:die()
+    GAMESTATE = 'gameover'
+end
+
+
 function Mage:timeControlAbility()
     self.abilities.timeControl:activate()
 end
@@ -99,11 +132,10 @@ end
 
 function Mage:render()
     love.graphics.draw(self.image, self.x, self.y)
-
-    -- Render Mage hearts, aka health
-    love.graphics.draw(self.heartImage, self.sprites.full, 10, 30)
-    love.graphics.draw(self.heartImage, self.sprites.half, 45, 30)
-    love.graphics.draw(self.heartImage, self.sprites.empty, 80, 30)
+    
+    for i = 1, self.health do
+        love.graphics.draw(self.heartImage, self.currentQuad, 10 + (i - 1) * 32, 30)
+    end
 end
 
 return Mage

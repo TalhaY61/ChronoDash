@@ -19,9 +19,6 @@ end
 
 function Obstacle:update(dt)
     self.x = self.x - self.speed * dt
-    if self.x < -self.width then
-        self.x = WINDOW_WIDTH
-    end
 end
 
 function Obstacle:render()

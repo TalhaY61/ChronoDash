@@ -36,16 +36,24 @@ function ObstaclesManager:removeObstacles()
     end
 end
 
-function ObstaclesManager:update(dt)
+function ObstaclesManager:update(dt, isTimeControlActive)
     self:removeObstacles()
 
-    if #self.obstacles == 0 then
+    local gapBetweenObstacles = math.random(300, 1000)
+    local lastObstacle = self.obstacles[#self.obstacles]
+
+    if #self.obstacles == 0 or WINDOW_WIDTH - lastObstacle.x > gapBetweenObstacles then
         self:spawnObstacle()
     end
 
     for _, obstacle in ipairs(self.obstacles) do
-        obstacle:update(dt)
+        local adjustedDt = dt
+        if isTimeControlActive then
+            adjustedDt = dt * 0.5 -- Slow down obstacles
+        end
+        obstacle:update(adjustedDt)
     end
+
 end
 
 function ObstaclesManager:render()

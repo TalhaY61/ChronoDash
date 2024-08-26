@@ -19,21 +19,33 @@ local mage = Mage:new()                         -- Mage instance
 local obstaclesManager = ObstaclesManager:new() -- ObstaclesManager instance
 local timeControlAbility = TimeControl:new()    -- BaseAbility instance
 
--- Platform scrolling variables
+-- Platform SCROLLING variables
 local platformSpeed = 100
 local platformScroll = 0
+-- Background scrolling baş döndürüyor yaw xd
+-- local backgroundSpeed = 100
+-- local backgroundScroll = 0
+
+GAMESTATE = 'menu'
+local highlighted = 1
 
 -- Pause variables, after collision
-local scrolling = true
+SCROLLING = true
 
 function love.load()
     love.graphics.setDefaultFilter('nearest', 'nearest')
     love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT)
     love.window.setTitle('Chrono Dash')
 
-    love.keyboard.keysPressed = {}
+    -- initialize our nice-looking retro text fonts
+    gFonts = {
+        ['small'] = love.graphics.newFont('fonts/Orbitron-Regular.ttf', 8),
+        ['medium'] = love.graphics.newFont('fonts/Orbitron-Medium.ttf', 16),
+        ['bold'] = love.graphics.newFont('fonts/Orbitron-Bold.ttf', 32)
+    }
+    love.graphics.setFont(gFonts['small'])
 
-    _G.timeScale = 1  -- Setze die Zeit-Skala beim Laden des Spiels zurück
+    love.keyboard.keysPressed = {}
 end
 
 function love.keypressed(key)
@@ -49,21 +61,53 @@ end
 
 function love.update(dt)
 
-    -- Update the time scale, its for the time control ability
-    local scaledDt = dt * (_G.timeScale or 1)
+    if GAMESTATE == 'menu' then
+        -- Menüsteuerung hier
+        if love.keyboard.wasPressed('up') or love.keyboard.wasPressed('down') then
+            highlighted = highlighted == 1 and 2 or 1
+        end
+    
+        -- confirm whichever option we have selected to change screens
+        if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
+    
+            if highlighted == 1 then
+                GAMESTATE = 'play'
+            end
 
-    if scrolling then
-        -- Update platform scrolling
-        platformScroll = (platformScroll + platformSpeed * dt) % platform:getWidth()
+            if highlighted == 2 then
+                love.event.quit()
+            end
+        end
+    
+        -- we no longer have this globally, so include here
+        if love.keyboard.wasPressed('escape') then
+            love.event.quit()
+        end
 
-        -- Update the mage and obstacles
-        mage:update(dt)
-        -- Update the obstacles with the scaled delta time, for the time control ability
-        obstaclesManager:update(scaledDt)
+    elseif GAMESTATE == 'play' then
+        if SCROLLING then
+            -- Update platform SCROLLING
+            platformScroll = (platformScroll + platformSpeed * dt) % platform:getWidth()
+            --backgroundScroll = (backgroundScroll + backgroundSpeed * dt) % background:getWidth()
 
-        -- Check for collisions between mage and obstacles
-        if obstaclesManager:checkCollisions(mage) then
-            scrolling = false
+            -- Update the mage and obstacles
+            mage:update(dt)
+            -- Update the obstacles with the scaled delta time, for the time control ability
+            local isTimeControlActive = mage.abilities.timeControl.isActive
+            obstaclesManager:update(dt, isTimeControlActive)
+
+            -- Check for collisions between mage and obstacles
+            if obstaclesManager:checkCollisions(mage) then
+                mage:takeDamage(1)
+            end
+        end
+    elseif GAMESTATE == 'gameover' then
+        -- Überprüfen, ob der Spieler neu starten möchte
+        if love.keyboard.wasPressed('r') then
+            GAMESTATE = 'menu'
+            -- Spiel zurücksetzen, Leben wiederherstellen, Hindernisse löschen usw.
+            mage:init()
+            obstaclesManager:init()
         end
     end
 
@@ -71,20 +115,52 @@ function love.update(dt)
 end
 
 function love.draw()
-    -- Draw the background
-    love.graphics.draw(background, 0, 0)
 
-    -- Draw the scrolling platforms
-    love.graphics.draw(platform, -platformScroll, 655)
-    love.graphics.draw(platform, -platformScroll + platform:getWidth(), 655)
+    love.graphics.setFont(gFonts['bold'])
 
-    -- Draw the FPS in the upper left corner
+    if GAMESTATE == 'menu' then
+        if highlighted == 1 then
+            love.graphics.setColor(103/255, 1, 1, 1)
+        end
+        love.graphics.printf("START", 0, WINDOW_HEIGHT / 2 + 70, WINDOW_WIDTH, 'center')
+    
+        -- reset the color
+        love.graphics.setColor(1, 1, 1, 1)
+    
+        -- render option 2 blue if we're highlighting that one
+        if highlighted == 2 then
+            love.graphics.setColor(103/255, 1, 1, 1)
+        end
+        love.graphics.printf("QUIT", 0, WINDOW_HEIGHT / 2 + 140, WINDOW_WIDTH, 'center')
+    
+        -- reset the color
+        love.graphics.setColor(1, 1, 1, 1)
+
+    elseif GAMESTATE == 'play' then
+        -- Draw the background
+        love.graphics.draw(background, 0, 0)
+        -- love.graphics.draw(background, -backgroundScroll + background:getWidth(), 0)
+
+        -- Draw the SCROLLING platforms
+        love.graphics.draw(platform, -platformScroll, 655)
+        love.graphics.draw(platform, -platformScroll + platform:getWidth(), 655)
+
+        -- Draw the FPS in the upper left corner
+        displayFPS()
+
+        -- Draw the mage and obstacles
+        mage:render()
+        obstaclesManager:render()
+        timeControlAbility:render()
+    elseif GAMESTATE == 'gameover' then
+        love.graphics.printf("GAME OVER", 0, WINDOW_HEIGHT / 2 - 20, WINDOW_WIDTH, 'center')
+        love.graphics.printf("Press R to Restart", 0, WINDOW_HEIGHT / 2 + 20, WINDOW_WIDTH, 'center')
+    end
+end
+
+function displayFPS()
+    -- simple FPS display across all states
+    love.graphics.setFont(gFonts['medium'])
     love.graphics.setColor(1, 1, 1) -- White for the text
     love.graphics.print("FPS: " .. tostring(love.timer.getFPS()), 10, 10)
-
-    -- Draw the mage and obstacles
-    mage:render()
-    obstaclesManager:render()
-    timeControlAbility:render()
-    
 end
