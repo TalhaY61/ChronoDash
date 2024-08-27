@@ -1,4 +1,3 @@
--- src/Obstacle.lua
 local Obstacle = {}
 Obstacle.__index = Obstacle
 

@@ -1,4 +1,3 @@
-
 local Mage = {}
 Mage.__index = Mage
 

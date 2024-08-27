@@ -1,4 +1,3 @@
--- src/Cactus.lua
 local Obstacle = require 'src/obstacles/Obstacle'
 local Cactus = setmetatable({}, { __index = Obstacle })
 Cactus.__index = Cactus

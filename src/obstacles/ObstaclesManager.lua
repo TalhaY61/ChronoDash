@@ -1,4 +1,3 @@
--- src/ObstaclesManager.lua
 local ObstaclesManager = {}
 ObstaclesManager.__index = ObstaclesManager
 

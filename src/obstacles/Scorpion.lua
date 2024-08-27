@@ -1,4 +1,3 @@
--- src/Scorpion.lua
 local Obstacle = require 'src/obstacles/Obstacle'
 local Scorpion = setmetatable({}, { __index = Obstacle })
 Scorpion.__index = Scorpion

@@ -1,4 +1,3 @@
--- src/abilities/TimeControl.lua
 local BaseAbility = require 'src/abilities/BaseAbility'
 
 local TimeControl = setmetatable({}, {__index = BaseAbility})
@@ -20,11 +19,10 @@ function TimeControl:init()
         finished = love.graphics.newQuad(0, 32, 32, 32, self.image:getDimensions())
     }
     self.currentQuad = self.sprites.start
-    self.state = 'start'
 
     -- Ability-specific variables
     self.activeDuration = 3      -- TimeControl active for 3 seconds
-    self.cooldownDuration = 5    -- 5 seconds cooldown
+    self.cooldownDuration = 10    -- 5 seconds cooldown
     self.isActive = false
     self.isCooldown = false
     self.timer = 0
