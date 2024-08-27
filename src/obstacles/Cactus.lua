@@ -1,4 +1,4 @@
-local Obstacle = require 'src/obstacles/Obstacle'
+local Obstacle = require 'src/Obstacle'
 local Cactus = setmetatable({}, { __index = Obstacle })
 Cactus.__index = Cactus
 
