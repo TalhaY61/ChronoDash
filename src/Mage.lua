@@ -115,7 +115,7 @@ function Mage:takeDamage(amount)
 end
 
 function Mage:die()
-    GAMESTATE = 'gameover'
+    gameStateManager:change('gameover')
 end
 
 
@@ -126,6 +126,20 @@ end
 function Mage:handleAbilities(dt)
     for _, ability in pairs(self.abilities) do
         ability:update(dt)
+    end
+end
+
+function Mage:isJumpingOverObstacle(obstacle)
+    -- Check if Mage is above the obstacle and falling down
+    local isAboveObstacle = self.y + self.height < obstacle.y
+    local isWithinObstacleXRange = self.x + self.hitboxOffsetX + self.hitboxWidth >= obstacle.x and
+                                   self.x + self.hitboxOffsetX <= obstacle.x + obstacle.width
+    local isFalling = self.dy > 0
+
+    if isAboveObstacle and isWithinObstacleXRange and isFalling then
+        return true
+    else
+        return false
     end
 end
 

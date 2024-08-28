@@ -4,6 +4,7 @@ ObstaclesManager.__index = ObstaclesManager
 local Scorpion = require 'src/obstacles/Scorpion'
 local Cactus = require 'src/obstacles/Cactus'
 
+
 function ObstaclesManager:new()
     local instance = setmetatable({}, ObstaclesManager)
     instance:init()
@@ -12,16 +13,35 @@ end
 
 function ObstaclesManager:init()
     self.obstacles = {}
+    self.obstacleSpeed = 400
+    self.obstacleGap = 900
 end
 
-function ObstaclesManager:spawnObstacle()
+function ObstaclesManager:setObstacleValues(level)
+    if level == 1 then 
+        self.obstacleSpeed = 400
+        self.obstacleGap = 400
+    elseif level == 2 then
+        self.obstacleSpeed = 500
+        self.obstacleGap = 500
+    elseif level == 3 then
+        self.obstacleSpeed = 600
+        self.obstacleGap = 500
+    end
+end
+
+function ObstaclesManager:getObstacleValues()
+    return self.obstacleSpeed, self.obstacleGap
+end
+
+function ObstaclesManager:spawnObstacle(obstacleSpeed)
     local obstacleType = math.random(1, 2)
     local obstacle
 
     if obstacleType == 1 then
-        obstacle = Cactus:new()
+        obstacle = Cactus:new(obstacleSpeed)
     else
-        obstacle = Scorpion:new()
+        obstacle = Scorpion:new(obstacleSpeed)
     end
 
     table.insert(self.obstacles, obstacle)
@@ -31,18 +51,20 @@ function ObstaclesManager:removeObstacles()
     for i = #self.obstacles, 1, -1 do
         if self.obstacles[i].x < -self.obstacles[i].width then
             table.remove(self.obstacles, i)
+            return true
         end
     end
+    return false
 end
 
-function ObstaclesManager:update(dt, isTimeControlActive)
+function ObstaclesManager:update(dt, isTimeControlActive, level)
     self:removeObstacles()
+    self:setObstacleValues(level)
 
-    local gapBetweenObstacles = math.random(300, 1000)
     local lastObstacle = self.obstacles[#self.obstacles]
 
-    if #self.obstacles == 0 or WINDOW_WIDTH - lastObstacle.x > gapBetweenObstacles then
-        self:spawnObstacle()
+    if #self.obstacles == 0 or WINDOW_WIDTH - lastObstacle.x > self.obstacleGap then
+        self:spawnObstacle(self.obstacleSpeed)
     end
 
     for _, obstacle in ipairs(self.obstacles) do
@@ -52,7 +74,6 @@ function ObstaclesManager:update(dt, isTimeControlActive)
         end
         obstacle:update(adjustedDt)
     end
-
 end
 
 function ObstaclesManager:render()
@@ -68,6 +89,10 @@ function ObstaclesManager:checkCollisions(mage)
         end
     end
     return false
+end
+
+function ObstaclesManager:getObstacles()
+    return self.obstacles
 end
 
 return ObstaclesManager
