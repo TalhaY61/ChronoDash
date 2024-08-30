@@ -36,10 +36,11 @@ function LevelManager:advanceToNextLevel()
     self.requiredScore = self.requiredScore + 50
 
     -- If the level is not defined, the game can end or loop back
-    if self.currentLevel > 3 then
-        self.currentLevel = 1
+    if self.currentLevel > 7 then
+        gameStateManager:change('gamewin')
     end
 end
+
 
 function LevelManager:reset()
     self.currentLevel = 1

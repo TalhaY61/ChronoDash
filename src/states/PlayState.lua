@@ -64,7 +64,6 @@ function PlayState:update(dt)
                     gameStateManager:change('gameover')
                 end
             end
-
             levelManager:update(dt)
         end
     end
@@ -99,8 +98,6 @@ function PlayState:draw()
     local textHeight = love.graphics.getFont():getHeight()
 
     love.graphics.printf(combinedText, (WINDOW_WIDTH - textWidth) / 2, textHeight / 2, textWidth, 'center')
-
-
 
     if not SCROLLING then
         displayPauseMenu()

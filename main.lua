@@ -3,6 +3,7 @@ local StateManager = require 'src/states/StateManager'
 local MenuState = require 'src/states/MenuState'
 local PlayState = require 'src/states/PlayState'
 local GameOverState = require 'src/states/GameOverState'
+local GameWinState = require 'src/states/GameWinState'
 
 -- Physical screen dimensions
 WINDOW_WIDTH = 1280
@@ -44,6 +45,7 @@ function love.load()
     gameStateManager:add('menu', MenuState)
     gameStateManager:add('play', PlayState)
     gameStateManager:add('gameover', GameOverState)
+    gameStateManager:add('gamewin', GameWinState)
 
     -- Start the game with the menu state
     gameStateManager:change('menu')
