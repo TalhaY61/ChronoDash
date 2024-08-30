@@ -3,6 +3,7 @@ ObstaclesManager.__index = ObstaclesManager
 
 local Scorpion = require 'src/obstacles/Scorpion'
 local Cactus = require 'src/obstacles/Cactus'
+local Vulture = require 'src/obstacles/Vulture'
 
 
 function ObstaclesManager:new()
@@ -46,18 +47,24 @@ function ObstaclesManager:getObstacleValues()
     return self.obstacleSpeed, self.obstacleGap
 end
 
-function ObstaclesManager:spawnObstacle(obstacleSpeed)
-    local obstacleType = math.random(1, 2)
+function ObstaclesManager:spawnObstacle(obstacleSpeed, level)
+    local obstacleType = math.random(1, 3)
     local obstacle
 
     if obstacleType == 1 then
         obstacle = Cactus:new(obstacleSpeed)
-    else
+    elseif obstacleType == 2 then
         obstacle = Scorpion:new(obstacleSpeed)
+    elseif obstacleType == 3 and level >= 3 then
+        obstacle = Vulture:new(obstacleSpeed)
+    else
+        -- If the level is not high enough, we only spawn cacti
+        obstacle = Cactus:new(obstacleSpeed) 
     end
 
     table.insert(self.obstacles, obstacle)
 end
+
 
 function ObstaclesManager:removeObstacles()
     for i = #self.obstacles, 1, -1 do
@@ -76,7 +83,7 @@ function ObstaclesManager:update(dt, isTimeControlActive, level)
     local lastObstacle = self.obstacles[#self.obstacles]
 
     if #self.obstacles == 0 or WINDOW_WIDTH - lastObstacle.x > self.obstacleGap then
-        self:spawnObstacle(self.obstacleSpeed)
+        self:spawnObstacle(self.obstacleSpeed, level)
     end
 
     for _, obstacle in ipairs(self.obstacles) do
