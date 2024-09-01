@@ -28,14 +28,14 @@ function love.load()
     }
     love.graphics.setFont(gFonts['small'])
 
-    gkeybindingsSprites = {
+    gKeybindingsSprites = {
         ['interact'] = love.graphics.newQuad(0, 0, 48, 48, keybindings:getDimensions()),
         ['restart'] = love.graphics.newQuad(0, 48, 48, 48, keybindings:getDimensions()),
         ['timeControl'] = love.graphics.newQuad(48, 0, 48, 48, keybindings:getDimensions()),
         ['pause'] = love.graphics.newQuad(48, 48, 48, 48, keybindings:getDimensions()),
     }
 
-    gkeybindingsSprites2 = {
+    gKeybindingsSprites2 = {
         ['jump'] = love.graphics.newQuad(0, 0, 64, 32, keybindings_2:getDimensions()),
         ['quit'] = love.graphics.newQuad(0, 32, 64, 32, keybindings_2:getDimensions()),
     }
@@ -79,27 +79,27 @@ function displayKeybindings()
 
     love.graphics.setFont(gFonts['medium'])
     -- The Interact keybinding (not implemented yet)
-    love.graphics.draw(keybindings, gkeybindingsSprites['interact'], WINDOW_WIDTH - 300, 10)
+    love.graphics.draw(keybindings, gKeybindingsSprites['interact'], WINDOW_WIDTH - 300, 10)
     love.graphics.print("Interact", WINDOW_WIDTH - 250, 20)
 
     -- The Restart keybinding
-    love.graphics.draw(keybindings, gkeybindingsSprites['restart'], WINDOW_WIDTH - 300, 40)
+    love.graphics.draw(keybindings, gKeybindingsSprites['restart'], WINDOW_WIDTH - 300, 40)
     love.graphics.print("Restart", WINDOW_WIDTH - 250, 50)
     
     -- The Time Control keybinding
-    love.graphics.draw(keybindings, gkeybindingsSprites['timeControl'], WINDOW_WIDTH - 170, 10)
+    love.graphics.draw(keybindings, gKeybindingsSprites['timeControl'], WINDOW_WIDTH - 170, 10)
     love.graphics.print("Time Control", WINDOW_WIDTH - 120, 20)
 
     -- The Pause keybinding
-    love.graphics.draw(keybindings, gkeybindingsSprites['pause'], WINDOW_WIDTH - 170, 40)
+    love.graphics.draw(keybindings, gKeybindingsSprites['pause'], WINDOW_WIDTH - 170, 40)
     love.graphics.print("Pause", WINDOW_WIDTH - 120, 50)
 
     -- The Jump keybinding
-    love.graphics.draw(keybindings_2, gkeybindingsSprites2['jump'], WINDOW_WIDTH - 300, 80)
+    love.graphics.draw(keybindings_2, gKeybindingsSprites2['jump'], WINDOW_WIDTH - 300, 80)
     love.graphics.print("Jump", WINDOW_WIDTH - 230, 85)
 
     -- The Quit keybinding
-    love.graphics.draw(keybindings_2, gkeybindingsSprites2['quit'], WINDOW_WIDTH - 170, 80)
+    love.graphics.draw(keybindings_2, gKeybindingsSprites2['quit'], WINDOW_WIDTH - 170, 80)
     love.graphics.print("Quit", WINDOW_WIDTH - 110, 85)
 end
 
