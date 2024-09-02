@@ -5,10 +5,10 @@ local Scorpion = require 'src/obstacles/Scorpion'
 local Cactus = require 'src/obstacles/Cactus'
 local Vulture = require 'src/obstacles/Vulture'
 
-
 function ObstaclesManager:new()
     local instance = setmetatable({}, ObstaclesManager)
     instance:init()
+
     return instance
 end
 
@@ -40,6 +40,9 @@ function ObstaclesManager:setObstacleValues(level)
     elseif level == 7 then
         self.obstacleSpeed = 650
         self.obstacleGap = 650
+    else 
+        self.obstacleSpeed = 650
+        self.obstacleGap = 650
     end 
 end
 
@@ -58,12 +61,12 @@ function ObstaclesManager:spawnObstacle(obstacleSpeed, level)
     elseif obstacleType == 3 and level >= 3 then
         obstacle = Vulture:new(obstacleSpeed)
     else
-        -- If the level is not high enough, we only spawn cacti
         obstacle = Cactus:new(obstacleSpeed) 
     end
 
     table.insert(self.obstacles, obstacle)
 end
+
 
 
 function ObstaclesManager:removeObstacles()

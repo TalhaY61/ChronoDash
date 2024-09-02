@@ -5,6 +5,7 @@ local Mage = require 'src/Mage'
 local ObstaclesManager = require 'src/obstacles/ObstaclesManager'
 local TimeControl = require 'src/abilities/TimeControl'
 local LevelManager = require 'src/LevelManager'
+local Gemstone = require 'src/gemstones/Gemstone'
 
 -- Platform height
 PLATFORM_HEIGHT = 660
@@ -17,6 +18,7 @@ PLATFORM = love.graphics.newImage('images/platform.png')
 local mage = Mage:new()                         -- Mage instance
 local obstaclesManager = ObstaclesManager:new() -- ObstaclesManager instance
 local timeControlAbility = TimeControl:new()    -- BaseAbility instance
+local gemstone = Gemstone:new()               -- Gemstones instance
 
 local levelManager = LevelManager:new()
 
@@ -51,7 +53,20 @@ function PlayState:update(dt)
             mage:update(dt)
             local isTimeControlActive = mage.abilities.timeControl.isActive
             local getLevel = levelManager:getCurrentLevel()
+
             obstaclesManager:update(dt, isTimeControlActive, getLevel)
+            gemstone:update(dt, getLevel)
+
+            local collectedGemstone = gemstone:checkGemstone(mage)
+            if collectedGemstone then
+                if collectedGemstone == 'blue' then
+                    levelManager:addScore(20)
+                elseif collectedGemstone == 'red' then
+                    levelManager:addScore(40)
+                elseif collectedGemstone == 'green' then
+                    levelManager:addScore(60)
+                end
+            end
 
             if obstaclesManager:removeObstacles() then
                 levelManager:addScore(10)
@@ -60,11 +75,11 @@ function PlayState:update(dt)
             if obstaclesManager:checkCollisions(mage) then
                 mage:takeDamage(1)
                 if mage.health <= 0 then
-                    levelManager:reset()
-                    gameStateManager:change('gameover')
+                    gameStateManager:change('gameover', levelManager:getScore())
                 end
             end
-            levelManager:update(dt)
+            
+            levelManager:update()
         end
     end
 
@@ -73,7 +88,6 @@ function PlayState:update(dt)
         displayCountdown()
     end
 end
-
 
 function PlayState:draw()
     love.graphics.draw(BACKGROUND, 0, 0)
@@ -87,12 +101,11 @@ function PlayState:draw()
 
     mage:render()
     obstaclesManager:render()
+    gemstone:render()
     timeControlAbility:render()
 
-    -- Display the score and current level in the center at the top of the screen
     local scoreText = "Score: " .. tostring(levelManager:getScore())
     local levelText = "Level: " .. tostring(levelManager:getCurrentLevel())
-
     local combinedText = scoreText .. " | " .. levelText
     local textWidth = love.graphics.getFont():getWidth(combinedText)
     local textHeight = love.graphics.getFont():getHeight()
@@ -103,6 +116,7 @@ function PlayState:draw()
         displayPauseMenu()
     end
 end
+
 
 
 function displayFPS()
