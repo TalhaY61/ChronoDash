@@ -1,10 +1,6 @@
 local Gemstone = {}
 Gemstone.__index = Gemstone
 
-local Cactus = require 'src/obstacles/Cactus'
-local Scorpion = require 'src/obstacles/Scorpion'
-local Vulture = require 'src/obstacles/Vulture'
-
 function Gemstone:new()
     local instance = setmetatable({}, Gemstone)
     instance:init()
@@ -55,7 +51,7 @@ function Gemstone:spawnGemstone(color)
         width = self.width,
         height = self.height,
         x = WINDOW_WIDTH + self.width,
-        y = PLATFORM_HEIGHT - self.height,
+        y = PLATFORM_HEIGHT - math.random(self.height, 100),
         speed = 400,
         quad = self.gemstoneQuads[color],
         color = color
