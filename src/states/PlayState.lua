@@ -47,7 +47,7 @@ function PlayState:update(dt)
     if SCROLLING then
         countdown = countdown - dt
 
-        if countdown <= 0 then
+        if countdown <= 0 then    
             platformScroll = (platformScroll + platformSpeed * dt) % PLATFORM:getWidth()
 
             mage:update(dt)
@@ -60,6 +60,7 @@ function PlayState:update(dt)
 
             local collectedGemstone = gemstone:checkGemstone(mage)
             if collectedGemstone then
+                love.audio.play(gemstoneSound)
                 if collectedGemstone == 'blue' then
                     levelManager:addScore(10)
                 elseif collectedGemstone == 'red' then

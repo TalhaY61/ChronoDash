@@ -9,12 +9,14 @@ end
 
 function MenuState:update()
     if love.keyboard.wasPressed('up') or love.keyboard.wasPressed('down') then
+        love.audio.play(selectSound)
         -- Toggle between 1 and 2 for the menu options
         highlighted = highlighted == 1 and 2 or 1
     end
 
     if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
         if highlighted == 1 then
+            love.audio.play(selectSound)
             gameStateManager:change('play')
         elseif highlighted == 2 then
             love.event.quit()

@@ -58,7 +58,7 @@ function ObstaclesManager:spawnObstacle(obstacleSpeed, level)
         obstacle = Cactus:new(obstacleSpeed)
     elseif obstacleType == 2 then
         obstacle = Scorpion:new(obstacleSpeed)
-    elseif obstacleType == 3 and level >= 3 then
+    elseif obstacleType == 3 and level >= 2 then
         obstacle = Vulture:new(obstacleSpeed)
     else
         obstacle = Cactus:new(obstacleSpeed) 

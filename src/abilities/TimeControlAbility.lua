@@ -30,6 +30,7 @@ end
 
 function TimeControlAbilityAbility:activate()
     if not self.isActive and not self.isCooldown then
+        love.audio.play(timeControlAbilitySound)
         self.isActive = true
         self.currentQuad = self.sprites['active']
         self.timer = self.activeDuration

@@ -44,7 +44,7 @@
         -- Invincibility variables after taking damage
         self.isInvincible = false
         self.invincibleTimer = 0
-        self.invincibleDuration = 2        
+        self.invincibleDuration = 1
     end
 
     -- Obstacle = in DE; Hindernis
@@ -56,7 +56,7 @@
         end
         return false
     end
-    
+
     function Mage:update(dt)
         -- Apply gravity to the mage
         self.dy = self.dy + self.gravity * dt
@@ -88,17 +88,20 @@
     end
 
     function Mage:handleJump()
+        love.audio.play(jumpSound)
         self.dy = self.jumpHeight
         self.jumpCount = self.jumpCount + 1
     end
 
     function Mage:takeDamage(amount)
         if not self.isInvincible then
+            love.audio.play(hitSound)
             self.health = self.health - amount
             self.isInvincible = true
             self.invincibleTimer = self.invincibleDuration
-            
+
             if self.health == 0 then
+                love.audio.play(gameOverSound)
                 gameStateManager:change('gameover')
             end
         end
@@ -123,7 +126,7 @@
 
     function Mage:render()
         love.graphics.draw(self.image, self.x, self.y)
-        
+
         for i = 1, self.health do
             love.graphics.draw(self.heartImage, self.currentQuad, 10 + (i - 1) * 32, 30)
         end
