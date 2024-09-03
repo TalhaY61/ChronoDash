@@ -19,7 +19,7 @@ function Gemstone:init()
 
     self.gemstones = {}
     self.spawnTimer = 0
-    self.spawnInterval = 10 -- seconds
+    self.spawnInterval = 10
 end
 
 function Gemstone:update(dt, level)
@@ -51,7 +51,7 @@ function Gemstone:spawnGemstone(color)
         width = self.width,
         height = self.height,
         x = WINDOW_WIDTH + self.width,
-        y = PLATFORM_HEIGHT - math.random(self.height, 100),
+        y = PLATFORM_HEIGHT - math.random(self.height, 150),
         speed = 400,
         quad = self.gemstoneQuads[color],
         color = color
@@ -61,12 +61,12 @@ function Gemstone:spawnGemstone(color)
 end
 
 function Gemstone:selectColor(level)
-    if level > 6 then
-        return 'green'
+    if level > 2 then
+        return 'blue'
     elseif level > 4 then
         return 'red'
-    elseif level > 2 then
-        return 'blue'
+    elseif level > 6 then
+        return 'green'
     end
 end
 
@@ -75,7 +75,6 @@ function Gemstone:checkGemstone(mage)
         local gemstone = self.gemstones[i]
         
         if self:collides(gemstone, mage) then
-            -- Rückgabewert des gesammelten Edelsteins
             local collectedGemstone = gemstone.color
             table.remove(self.gemstones, i)
             return collectedGemstone
@@ -85,10 +84,7 @@ end
 
 
 function Gemstone:collides(gemstone, mage)
-    return not (gemstone.x + gemstone.width < mage.x or
-                gemstone.x > mage.x + mage.width or
-                gemstone.y + gemstone.height < mage.y or
-                gemstone.y > mage.y + mage.height)
+    return mage:collides(gemstone)
 end
 
 function Gemstone:render()
@@ -96,8 +92,7 @@ function Gemstone:render()
         if gemstone.quad and self.gemstoneImage then
             love.graphics.draw(self.gemstoneImage, gemstone.quad, gemstone.x, gemstone.y)
         else
-            -- Füge eine Fehlermeldung hinzu, um herauszufinden, welches Element nil ist
-            print("Fehler: quad oder gemstoneImage ist nil")
+            print("Error: Gemstone quad or image not found")
         end
     end
 end

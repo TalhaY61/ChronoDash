@@ -79,7 +79,7 @@ function ObstaclesManager:removeObstacles()
     return false
 end
 
-function ObstaclesManager:update(dt, isTimeControlActive, level)
+function ObstaclesManager:update(dt, isTimeControlAbilityActive, level)
     self:removeObstacles()
     self:setObstacleValues(level)
 
@@ -89,9 +89,10 @@ function ObstaclesManager:update(dt, isTimeControlActive, level)
         self:spawnObstacle(self.obstacleSpeed, level)
     end
 
+    -- For TimeControlAbility, slow down the obstacles
     for _, obstacle in ipairs(self.obstacles) do
         local adjustedDt = dt
-        if isTimeControlActive then
+        if isTimeControlAbilityActive then
             adjustedDt = dt * 0.5 -- Slow down obstacles
         end
         obstacle:update(adjustedDt)

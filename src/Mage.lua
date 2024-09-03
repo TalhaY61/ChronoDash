@@ -1,14 +1,13 @@
     local Mage = {}
     Mage.__index = Mage
 
-    local TimeControl = require 'src/abilities/TimeControl'
-    local ObstaclesManager = require "src/obstacles/ObstaclesManager"
+    local TimeControlAbility = require 'src/abilities/TimeControlAbility'
 
     function Mage:new()
         local instance = setmetatable({}, Mage)
         instance:init()
         instance.abilities = {
-            timeControl = TimeControl:new()
+            timeControlAbility = TimeControlAbility:new()
         }
         return instance
     end
@@ -41,32 +40,23 @@
 
         -- Health variables
         self.health = 3
+
+        -- Invincibility variables after taking damage
         self.isInvincible = false
         self.invincibleTimer = 0
-        self.invincibleDuration = 1
-
-        -- Custom hitbox dimensions
-        self.hitboxWidth = self.width * 0.7
-        self.hitboxHeight = self.height
-        self.hitboxOffsetX = (self.width - self.hitboxWidth) / 4
-        self.hitboxOffsetY = (self.height - self.hitboxHeight) / 2
-        
+        self.invincibleDuration = 2        
     end
 
+    -- Obstacle = in DE; Hindernis
     function Mage:collides(obstacle)
-        if self.x + self.hitboxOffsetX + self.hitboxWidth < obstacle.x or
-        self.x + self.hitboxOffsetX > obstacle.x + obstacle.width then
-            return false
+        if self.x + self.width - 10 >= obstacle.x and self.x + 10 <= obstacle.x + obstacle.width then
+            if self.y + self.height - 10 >= obstacle.y and self.y + 10 <= obstacle.y + obstacle.height then
+                return true
+            end
         end
-
-        if self.y + self.hitboxOffsetY + self.hitboxHeight < obstacle.y or
-        self.y + self.hitboxOffsetY > obstacle.y + obstacle.height then
-            return false
-        end
-
-        return true
+        return false
     end
-
+    
     function Mage:update(dt)
         -- Apply gravity to the mage
         self.dy = self.dy + self.gravity * dt
@@ -114,27 +104,20 @@
         end
     end
 
+    function Mage:addHealth(health)
+        self.health = self.health + health
+        if self.health > 3 then
+            self.health = 3
+        end
+    end
+
     function Mage:timeControlAbility()
-        self.abilities.timeControl:activate()
+        self.abilities.timeControlAbility:activate()
     end
 
     function Mage:handleAbilities(dt)
         for _, ability in pairs(self.abilities) do
             ability:update(dt)
-        end
-    end
-
-    function Mage:isJumpingOverObstacle(obstacle)
-        -- Check if Mage is above the obstacle and falling down
-        local isAboveObstacle = self.y + self.height < obstacle.y
-        local isWithinObstacleXRange = self.x + self.hitboxOffsetX + self.hitboxWidth >= obstacle.x and
-                                    self.x + self.hitboxOffsetX <= obstacle.x + obstacle.width
-        local isFalling = self.dy > 0
-
-        if isAboveObstacle and isWithinObstacleXRange and isFalling then
-            return true
-        else
-            return false
         end
     end
 

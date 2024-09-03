@@ -17,7 +17,7 @@ function love.load()
     love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT)
     love.window.setTitle('Chrono Dash')
 
-    -- initialize our nice-looking retro text fonts
+    -- Initialize text fonts
     gFonts = {
         ['small'] = love.graphics.newFont('fonts/Orbitron-Regular.ttf', 8),
         ['medium'] = love.graphics.newFont('fonts/Orbitron-Medium.ttf', 16),
@@ -27,13 +27,15 @@ function love.load()
     }
     love.graphics.setFont(gFonts['small'])
 
+    -- Initialize keybindings sprites
     gKeybindingsSprites = {
         ['interact'] = love.graphics.newQuad(0, 0, 48, 48, keybindings:getDimensions()),
         ['restart'] = love.graphics.newQuad(0, 48, 48, 48, keybindings:getDimensions()),
-        ['timeControl'] = love.graphics.newQuad(48, 0, 48, 48, keybindings:getDimensions()),
+        ['timeControlAbility'] = love.graphics.newQuad(48, 0, 48, 48, keybindings:getDimensions()),
         ['pause'] = love.graphics.newQuad(48, 48, 48, 48, keybindings:getDimensions()),
     }
 
+    -- Initialize keybindings sprites
     gKeybindingsSprites2 = {
         ['jump'] = love.graphics.newQuad(0, 0, 64, 32, keybindings_2:getDimensions()),
         ['quit'] = love.graphics.newQuad(0, 32, 64, 32, keybindings_2:getDimensions()),
@@ -86,7 +88,7 @@ function displayKeybindings()
     love.graphics.print("Restart", WINDOW_WIDTH - 250, 50)
     
     -- The Time Control keybinding
-    love.graphics.draw(keybindings, gKeybindingsSprites['timeControl'], WINDOW_WIDTH - 170, 10)
+    love.graphics.draw(keybindings, gKeybindingsSprites['timeControlAbility'], WINDOW_WIDTH - 170, 10)
     love.graphics.print("Time Control", WINDOW_WIDTH - 120, 20)
 
     -- The Pause keybinding

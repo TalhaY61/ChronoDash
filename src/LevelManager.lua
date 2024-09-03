@@ -15,11 +15,11 @@ end
 function LevelManager:init()
     self.currentLevel = 1
     self.score = 0
-    self.requiredScore = 100
+    self.requiredScore = 20
     obstacleManager:setObstacleValues(self.currentLevel)
 end
 
-function LevelManager:update(dt)
+function LevelManager:update()
     -- Check if the player has reached the required score for the next level
     if self.score >= self.requiredScore then
         obstacleManager:removeObstacles()
@@ -30,17 +30,24 @@ end
 
 function LevelManager:advanceToNextLevel()
     self.currentLevel = self.currentLevel + 1
-    self.score = 0 -- Reset score for the new level
+    self.score = 0
 
-    -- Optionally increase the required score for the next level
-    self.requiredScore = self.requiredScore + 50
+    if self.currentLevel == 2 then
+        self.requiredScore = self.score + 30
+    elseif self.currentLevel == 3 then
+        self.requiredScore = self.score + 40
+    elseif self.currentLevel == 4 then
+        self.requiredScore = self.score + 50
+    else 
+        self.requiredScore = self.score + 60
+    end
 end
 
 
 function LevelManager:reset()
     self.currentLevel = 1
     self.score = 0
-    self.requiredScore = 100
+    self.requiredScore = 10
 end
 
 function LevelManager:addScore(points)
