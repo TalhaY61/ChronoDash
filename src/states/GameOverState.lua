@@ -4,7 +4,7 @@ function GameOverState:enter()
     
 end
 
-function GameOverState:update(dt)
+function GameOverState:update()
     if love.keyboard.wasPressed('r') then
         gameStateManager:change('play')
     end

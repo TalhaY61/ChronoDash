@@ -1,16 +1,13 @@
 -- Load the StateManager and the states
 local StateManager = require 'src/states/StateManager'
 local MenuState = require 'src/states/MenuState'
+local HowToPlayState = require 'src/states/HowToPlayState'
 local PlayState = require 'src/states/PlayState'
 local GameOverState = require 'src/states/GameOverState'
 
 -- Physical screen dimensions
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
-
--- Load the keybindings 
-local keybindings = love.graphics.newImage('images/keybindings.png')
-local keybindings_2 = love.graphics.newImage('images/keybindings_2.png')
 
 function love.load()
     love.graphics.setDefaultFilter('nearest', 'nearest')
@@ -30,23 +27,10 @@ function love.load()
     }
     love.graphics.setFont(gFonts['small'])
 
-    -- Initialize keybindings sprites
-    gKeybindingsSprites = {
-        ['interact'] = love.graphics.newQuad(0, 0, 48, 48, keybindings:getDimensions()),
-        ['restart'] = love.graphics.newQuad(0, 48, 48, 48, keybindings:getDimensions()),
-        ['timeControlAbility'] = love.graphics.newQuad(48, 0, 48, 48, keybindings:getDimensions()),
-        ['pause'] = love.graphics.newQuad(48, 48, 48, 48, keybindings:getDimensions()),
-    }
-
-    -- Initialize keybindings sprites
-    gKeybindingsSprites2 = {
-        ['jump'] = love.graphics.newQuad(0, 0, 64, 32, keybindings_2:getDimensions()),
-        ['quit'] = love.graphics.newQuad(0, 32, 64, 32, keybindings_2:getDimensions()),
-    }
-
     -- Create a new StateManager
     gameStateManager = StateManager:new()
     gameStateManager:add('menu', MenuState)
+    gameStateManager:add('howtoplay', HowToPlayState)
     gameStateManager:add('play', PlayState)
     gameStateManager:add('gameover', GameOverState)
     
@@ -84,35 +68,6 @@ end
 
 function love.draw()
     gameStateManager:draw()
-end
-
-function displayKeybindings() 
-    -- Display the keybindings on the screen
-
-    love.graphics.setFont(gFonts['medium'])
-    -- The Interact keybinding (not implemented yet)
-    love.graphics.draw(keybindings, gKeybindingsSprites['interact'], WINDOW_WIDTH - 300, 10)
-    love.graphics.print("Interact", WINDOW_WIDTH - 250, 20)
-
-    -- The Restart keybinding
-    love.graphics.draw(keybindings, gKeybindingsSprites['restart'], WINDOW_WIDTH - 300, 40)
-    love.graphics.print("Restart", WINDOW_WIDTH - 250, 50)
-    
-    -- The Time Control keybinding
-    love.graphics.draw(keybindings, gKeybindingsSprites['timeControlAbility'], WINDOW_WIDTH - 170, 10)
-    love.graphics.print("Time Control", WINDOW_WIDTH - 120, 20)
-
-    -- The Pause keybinding
-    love.graphics.draw(keybindings, gKeybindingsSprites['pause'], WINDOW_WIDTH - 170, 40)
-    love.graphics.print("Pause", WINDOW_WIDTH - 120, 50)
-
-    -- The Jump keybinding
-    love.graphics.draw(keybindings_2, gKeybindingsSprites2['jump'], WINDOW_WIDTH - 300, 80)
-    love.graphics.print("Jump", WINDOW_WIDTH - 230, 85)
-
-    -- The Quit keybinding
-    love.graphics.draw(keybindings_2, gKeybindingsSprites2['quit'], WINDOW_WIDTH - 170, 80)
-    love.graphics.print("Quit", WINDOW_WIDTH - 110, 85)
 end
 
 function initSounds()

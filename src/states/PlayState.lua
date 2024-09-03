@@ -100,13 +100,13 @@ function PlayState:draw()
 
     displayFPS()
     displayCountdown()
-    displayKeybindings()
 
     mage:render()
     obstaclesManager:render()
     gemstone:render()
     timeControlAbilityAbility:render()
 
+    love.graphics.setFont(gFonts['medium'])
     local scoreText = "Score: " .. tostring(levelManager:getScore())
     local levelText = "Level: " .. tostring(levelManager:getCurrentLevel())
     local combinedText = scoreText .. " | " .. levelText
