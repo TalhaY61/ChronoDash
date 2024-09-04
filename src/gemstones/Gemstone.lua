@@ -19,7 +19,7 @@ function Gemstone:init()
 
     self.gemstones = {}
     self.spawnTimer = 0
-    self.spawnInterval = 10
+    self.spawnInterval = 7
 end
 
 function Gemstone:update(dt, level)
@@ -61,14 +61,17 @@ function Gemstone:spawnGemstone(color)
 end
 
 function Gemstone:selectColor(level)
-    if level > 2 then
-        return 'blue'
+    if level > 6 then
+        local colors = {'blue', 'red', 'green'}
+        return colors[math.random(#colors)]
     elseif level > 4 then
-        return 'red'
-    elseif level > 6 then
-        return 'green'
+        local colors = {'blue', 'red'}
+        return colors[math.random(#colors)]
+    elseif level > 2 then
+        return 'blue'
     end
 end
+
 
 function Gemstone:checkGemstone(mage)
     for i = #self.gemstones, 1, -1 do

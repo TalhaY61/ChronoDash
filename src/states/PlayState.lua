@@ -65,6 +65,7 @@ function PlayState:update(dt)
                     levelManager:addScore(10)
                 elseif collectedGemstone == 'red' then
                     mage:addHealth(1)
+                    levelManager:addScore(20)
                 elseif collectedGemstone == 'green' then
                     levelManager:addScore(30)
                 end
