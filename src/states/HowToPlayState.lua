@@ -17,6 +17,9 @@ local gKeybindingsSprites2 = {
     ['quit'] = love.graphics.newQuad(0, 64, 128, 64, keybindings_2:getDimensions()),
 }
 
+local Gemstones = require 'src/gemstones/Gemstone'
+local gemstones = Gemstones:new()
+
 function HowToPlayState:enter()
     
 end
@@ -28,15 +31,15 @@ function HowToPlayState:update()
 end
 
 function HowToPlayState:draw()
-    -- Draw the background
+
+    love.graphics.setColor(0.5, 0.5, 0.5) -- Set color to a darker grey (50% brightness)
     love.graphics.draw(BACKGROUND, 0, 0)
+    love.graphics.setColor(1, 1, 1)
 
     -- Calculate the positions to center the keybindings
     local centerX = (WINDOW_WIDTH - 300) / 2
     local centerY = (WINDOW_HEIGHT - 150) / 2
     
-    -- Display the keybindings on the screen
-
     -- The Interact keybinding (not implemented yet)
     -- love.graphics.draw(keybindings, gKeybindingsSprites['interact'], WINDOW_WIDTH / 2, 10)
     -- love.graphics.print("Interact", WINDOW_WIDTH / 2, 20)
@@ -63,6 +66,19 @@ function HowToPlayState:draw()
     -- The Quit keybinding
     love.graphics.draw(keybindings_2, gKeybindingsSprites2['quit'], centerX + 135, centerY + 50)
     love.graphics.print("Quit", centerX + 240, centerY + 70)
+
+
+    -- Display the gemstones
+    love.graphics.setFont(gFonts['medium'])
+
+    love.graphics.draw(gemstones.gemstoneImage, gemstones.gemstoneQuads['blue'], centerX - 35, centerY + 200)
+    love.graphics.print(": 10 points", centerX + 10, centerY + 210)
+
+    love.graphics.draw(gemstones.gemstoneImage, gemstones.gemstoneQuads['red'], centerX - 35, centerY + 250)
+    love.graphics.print(": 20 points, +1 health", centerX + 10, centerY + 260)
+
+    love.graphics.draw(gemstones.gemstoneImage, gemstones.gemstoneQuads['green'], centerX - 35, centerY + 300)
+    love.graphics.print(": 30 points", centerX + 10, centerY + 310)
 end
 
 return HowToPlayState
