@@ -9,6 +9,10 @@ local GameOverState = require 'src/states/GameOverState'
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
 
+local targetFPS = 60
+local targetDT = 1 / targetFPS
+local accumulator = 0
+
 function love.load()
     love.graphics.setDefaultFilter('nearest', 'nearest')
     love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT)
@@ -62,8 +66,12 @@ function love.keyboard.wasPressed(key)
 end
 
 function love.update(dt)
-    gameStateManager:update(dt)
-    love.keyboard.keysPressed = {}
+    accumulator = accumulator + dt
+    while accumulator >= targetDT do
+        gameStateManager:update(targetDT)
+        accumulator = accumulator - targetDT
+        love.keyboard.keysPressed = {}
+    end
 end
 
 function love.draw()

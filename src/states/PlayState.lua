@@ -127,7 +127,13 @@ function displayFPS()
     -- Simple FPS display across all states
     love.graphics.setFont(gFonts['medium'])
     love.graphics.setColor(1, 1, 1) -- White
-    love.graphics.print("FPS: " .. tostring(love.timer.getFPS()), 10, 10)
+
+    local fps = love.timer.getFPS()
+
+    if fps > 60 then
+        fps = 60
+    end 
+    love.graphics.print("FPS: " .. tostring(fps), 10, 10)
 end
 
 function displayCountdown() 

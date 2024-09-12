@@ -61,7 +61,7 @@
         -- Apply gravity to the mage
         self.dy = self.dy + self.gravity * dt
         self.y = self.y + self.dy
-
+ 
         -- Prevent the mage from falling through the platform
         if self.y >= PLATFORM_HEIGHT - self.height then
             self.y = PLATFORM_HEIGHT - self.height
@@ -77,7 +77,9 @@
         end
 
         if love.keyboard.wasPressed('space') and self.jumpCount < self.maxJumps then
-        self:handleJump()
+            love.audio.play(jumpSound)
+            self.dy = self.jumpHeight
+            self.jumpCount = self.jumpCount + 1
         end
 
         if love.keyboard.wasPressed('t') then
@@ -88,9 +90,6 @@
     end
 
     function Mage:handleJump()
-        love.audio.play(jumpSound)
-        self.dy = self.jumpHeight
-        self.jumpCount = self.jumpCount + 1
     end
 
     function Mage:takeDamage(amount)

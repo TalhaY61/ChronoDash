@@ -39,6 +39,7 @@ end
 
 function MenuState:draw()
     love.graphics.draw(BACKGROUND, 0, 0)
+    love.graphics.draw(PLATFORM, 0, 655)
 
     love.graphics.setFont(gFonts['extrabold'])
     love.graphics.printf("CHRONO DASH", 0, WINDOW_HEIGHT / 2 - 70, WINDOW_WIDTH, 'center')
