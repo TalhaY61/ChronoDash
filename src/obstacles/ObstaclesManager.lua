@@ -26,23 +26,23 @@ function ObstaclesManager:setObstacleValues(level)
         self.obstacleSpeed = 450
         self.obstacleGap = 550
     elseif level == 3 then
-        self.obstacleSpeed = 500
-        self.obstacleGap = 500
+        self.obstacleSpeed = 475
+        self.obstacleGap = 525
     elseif level == 4 then
         self.obstacleSpeed = 550
-        self.obstacleGap = 450
+        self.obstacleGap = 525
     elseif level == 5 then
-        self.obstacleSpeed = 600
-        self.obstacleGap = 400
+        self.obstacleSpeed = 550
+        self.obstacleGap = 500
     elseif level == 6 then
-        self.obstacleSpeed = 650
-        self.obstacleGap = 400
+        self.obstacleSpeed = 575
+        self.obstacleGap = 500
     elseif level == 7 then
-        self.obstacleSpeed = 650
-        self.obstacleGap = 400
+        self.obstacleSpeed = 600
+        self.obstacleGap = 450
     else 
-        self.obstacleSpeed = 650
-        self.obstacleGap = 400
+        self.obstacleSpeed = 600
+        self.obstacleGap = 450
     end 
 end
 
