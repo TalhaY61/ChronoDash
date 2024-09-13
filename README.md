@@ -3,8 +3,8 @@ Hi 👋, this is my first ever game created with Lua.
 
 ## About the game
 This game was developed using the Lua programming language and the LÖVE game engine. All pixel art was personally created by me where i just used google and reddit for the some ideas.
-I used the "piskel" and "aseprite" software to create these pixels. For the background sound i found it on "Pixabay" and created the sound effect by myself with "jsfxr"
-It is a 2D pixel-art game, which offers an adventure where you control a magical character who must dodge obstacles, use the time control ability to slow down the enviroment, and survive to achieve the highest score.
+I used the "piskel" and "aseprite" software to create these pixels. For the background sound i found it on "Pixabay" and created the sound effect by myself with "jsfxr".
+It is a 2D pixel-art game, which offers an adventure where you control a magical character who must dodge obstacles, use the time control ability to slow down the environment, and survive to achieve the highest score.
 
 ## Game Menu
 ![](screenshots/GameMenu.png)
